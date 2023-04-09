@@ -3,55 +3,54 @@ import { Employees } from '../models/models.js';
 import { UploadedFile } from 'express-fileupload';
 import { v4 } from 'uuid';
 import path from 'path';
-import { EMPLOYEE_PLUG_IMG } from '../utils/conts.js';
+import fs from 'fs';
+import { EMPLOYEE_PLUG_IMG, __dirname } from '../utils/conts.js';
+import EmployeeService from '../services/EmployeeService.js';
+import ApiError from '../exceptions/ApiError.js';
+
 class EmployeeController {
   async addEmployee(req: Request, res: Response, next: NextFunction) {
     try {
       const { name, surname, patronymic, isShowable, entry_to_work, post, telephone, email } = req.body;
       let img = req.files?.img as UploadedFile;
-      let imgPathname: string;
 
-      if (img) {
-        imgPathname = v4() + '.jpg';
-        img.mv(path.resolve(__dirname, 'static', 'employees', imgPathname));
-      } else {
-        imgPathname = EMPLOYEE_PLUG_IMG;
-      }
-
-      const employee = await Employees.create({
+      const employee = await EmployeeService.addEmployee(
         name,
         surname,
         patronymic,
-        img: imgPathname,
         isShowable,
         entry_to_work,
         post,
         telephone,
         email,
-      });
+        img,
+      );
+
       return res.status(200).json(employee);
-    } catch (e) {
+    } catch (e: any) {
+      console.log(e.message);
       next(e);
     }
   }
   async putEmployee(req: Request, res: Response, next: NextFunction) {
     try {
-      const { employeeId } = req.params;
-      const { name, surname, patronymic, img, isShowable, entry_to_work, post, telephone, email } = req.body;
-      const employee = await Employees.update(
-        {
-          name,
-          surname,
-          patronymic,
-          img,
-          isShowable,
-          entry_to_work,
-          post,
-          telephone,
-          email,
-        },
-        { where: { $id$: employeeId } },
+      const employeeId = Number(req.params.employeeId);
+      const { name, surname, patronymic, isShowable, entry_to_work, post, telephone, email } = req.body;
+      let img = req.files?.img as UploadedFile;
+
+      const employee = await EmployeeService.putEmployee(
+        employeeId,
+        name,
+        surname,
+        patronymic,
+        isShowable,
+        entry_to_work,
+        post,
+        telephone,
+        email,
+        img,
       );
+
       return res.status(200).json(employee);
     } catch (e) {
       next(e);
@@ -59,10 +58,29 @@ class EmployeeController {
   }
   async deleteEmployee(req: Request, res: Response, next: NextFunction) {
     try {
-      const { employeeId } = req.params;
-      const employee = await Employees.findOne({ where: { $id$: employeeId } });
-      await Employees.destroy({ where: { $id$: employeeId } });
+      const employeeId = Number(req.params.employeeId);
+
+      const employee = await EmployeeService.deleteEmployee(employeeId, next);
+
+      if (!employee) {
+        return next(ApiError.BadRequest('Работник с таким Id не найден', []));
+      }
+
       return res.status(200).json(employee);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async getEmployees(req: Request, res: Response, next: NextFunction) {
+    try {
+      let limit = Number(req.query.limit);
+      let page = Number(req.query.page);
+
+      let offset = page * limit - limit;
+
+      const employees = await Employees.findAndCountAll({ limit: limit, offset: offset });
+
+      return res.status(200).json(employees);
     } catch (e) {
       next(e);
     }

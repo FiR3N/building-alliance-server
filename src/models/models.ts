@@ -81,7 +81,7 @@ Employees.init(
     telephone: { type: DataTypes.STRING, allowNull: true },
     email: { type: DataTypes.STRING, allowNull: true },
     isShowable: { type: DataTypes.BOOLEAN, allowNull: false },
-    entry_to_work: { type: DataTypes.DATE, allowNull: false },
+    entry_to_work: { type: DataTypes.DATEONLY, allowNull: false },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
