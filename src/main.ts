@@ -7,10 +7,10 @@ import fileUpload from 'express-fileupload';
 import router from './router/index.js';
 import errorMiddleware from './middleware/errorMiddleware.js';
 import path from 'path';
+import { __dirname } from './utils/conts.js';
 
 dotenv.config();
 const PORT = process.env.PORT || 5000;
-const __dirname = path.resolve('src');
 
 console.log(models);
 
@@ -21,11 +21,11 @@ app.use(
     origin: process.env.CLIENT_URL,
   }),
 );
-app.use(express.static(path.resolve(__dirname, 'static')));
-app.use(express.static(path.resolve(__dirname, 'static', 'products')));
+app.use('/api/images', express.static(path.resolve(__dirname, 'static')));
+app.use('/api/images', express.static(path.resolve(__dirname, 'static', 'employees')));
 app.use(fileUpload({}));
 
-app.use(router);
+app.use('/api', router);
 app.use(errorMiddleware);
 
 const start = async () => {

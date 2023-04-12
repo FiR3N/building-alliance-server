@@ -1,23 +1,21 @@
 import { NextFunction, Request, Response } from 'express';
 import { Employees } from '../models/models.js';
 import { UploadedFile } from 'express-fileupload';
-import { v4 } from 'uuid';
-import path from 'path';
-import fs from 'fs';
-import { EMPLOYEE_PLUG_IMG, __dirname } from '../utils/conts.js';
+import { __dirname } from '../utils/conts.js';
 import EmployeeService from '../services/EmployeeService.js';
 import ApiError from '../exceptions/ApiError.js';
 
 class EmployeeController {
   async addEmployee(req: Request, res: Response, next: NextFunction) {
     try {
-      const { name, surname, patronymic, isShowable, entry_to_work, post, telephone, email } = req.body;
+      const { name, surname, patronymic, description, isShowable, entry_to_work, post, telephone, email } = req.body;
       let img = req.files?.img as UploadedFile;
 
       const employee = await EmployeeService.addEmployee(
         name,
         surname,
         patronymic,
+        description,
         isShowable,
         entry_to_work,
         post,
@@ -35,14 +33,15 @@ class EmployeeController {
   async putEmployee(req: Request, res: Response, next: NextFunction) {
     try {
       const employeeId = Number(req.params.employeeId);
-      const { name, surname, patronymic, isShowable, entry_to_work, post, telephone, email } = req.body;
-      let img = req.files?.img as UploadedFile;
+      const { name, surname, patronymic, description, isShowable, entry_to_work, post, telephone, email } = req.body;
+      let img = (req.files?.img as UploadedFile) || null;
 
       const employee = await EmployeeService.putEmployee(
         employeeId,
         name,
         surname,
         patronymic,
+        description,
         isShowable,
         entry_to_work,
         post,

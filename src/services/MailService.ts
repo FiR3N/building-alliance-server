@@ -33,7 +33,7 @@ class MailService {
       <div style="margin-bottom: 10px; font-weight: bold;">UserName: ${name}</div>
       <div style="margin-bottom: 10px; font-weight: bold;"> UserSurname: ${surname}</div>
       <div style="margin-bottom: 10px; font-weight: bold;">CompanyName: ${companyName}</div>
-      <div style="margin-bottom: 20px; font-weight: bold;">Telephone: ${telephone}}</div>
+      <div style="margin-bottom: 20px; font-weight: bold;">Telephone: ${telephone}</div>
  
       <div>${text}</div>
       `,

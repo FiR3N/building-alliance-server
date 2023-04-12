@@ -37,9 +37,13 @@ News.init(
 class NewsInfos extends Model<InferAttributes<NewsInfos>, InferCreationAttributes<NewsInfos>> {
   declare id: CreationOptional<number>;
   declare description: string;
-  declare userId: ForeignKey<News['id']>;
+  declare newsId: ForeignKey<News['id']>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
+
+  declare static associations: {
+    infos: Association<NewsInfos, News>;
+  };
 }
 
 NewsInfos.init(
@@ -61,6 +65,7 @@ class Employees extends Model<InferAttributes<Employees>, InferCreationAttribute
   declare surname: string;
   declare patronymic: string;
   declare post: string;
+  declare description: string;
   declare img: string;
   declare telephone: string;
   declare email: string;
@@ -77,6 +82,13 @@ Employees.init(
     surname: { type: DataTypes.STRING, allowNull: false },
     patronymic: { type: DataTypes.STRING, allowNull: false },
     post: { type: DataTypes.STRING, allowNull: false },
+    description: {
+      type: DataTypes.TEXT,
+      allowNull: false,
+      validate: {
+        len: [30, 300],
+      },
+    },
     img: { type: DataTypes.STRING, allowNull: true },
     telephone: { type: DataTypes.STRING, allowNull: true },
     email: { type: DataTypes.STRING, allowNull: true },
@@ -90,12 +102,5 @@ Employees.init(
     tableName: 'employees',
   },
 );
-
-News.hasMany(NewsInfos, {
-  sourceKey: 'id',
-  foreignKey: 'newsId',
-  as: 'news-infos',
-});
-NewsInfos.belongsTo(News);
 
 export { News, NewsInfos, Employees };
