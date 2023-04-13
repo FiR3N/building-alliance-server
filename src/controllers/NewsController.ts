@@ -46,13 +46,18 @@ class NewsController {
   }
   async getNews(req: Request, res: Response, next: NextFunction) {
     try {
-      // let limit = Number(req.query.limit);
-      // let page = Number(req.query.page);
-      // let offset = page * limit - limit;
+      let limit = Number(req.query.limit);
+      let page = Number(req.query.page);
+      let offset = page * limit - limit;
       // const employees = await Employees.findAndCountAll({ limit: limit, offset: offset });
-      const news = await News.findAll({ include: [{ model: NewsInfos, as: 'infos' }] });
+      const news = await News.findAndCountAll({
+        include: [{ model: NewsInfos, as: 'infos', order: [['id', 'DESC']] }],
+        limit,
+        offset,
+      });
       return res.status(200).json(news);
     } catch (e) {
+      console.log(e);
       next(e);
     }
   }

@@ -76,8 +76,9 @@ class EmployeeController {
       let page = Number(req.query.page);
 
       let offset = page * limit - limit;
-
-      const employees = await Employees.findAndCountAll({ limit: limit, offset: offset });
+      let employees;
+      if (limit && page) employees = await Employees.findAndCountAll({ limit: limit, offset: offset });
+      else employees = await Employees.findAll();
 
       return res.status(200).json(employees);
     } catch (e) {

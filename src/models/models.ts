@@ -103,4 +103,13 @@ Employees.init(
   },
 );
 
+News.hasMany(NewsInfos, {
+  sourceKey: 'id',
+  foreignKey: 'newsId',
+  as: 'infos',
+});
+NewsInfos.belongsTo(News, {
+  foreignKey: 'newsId',
+  as: 'news',
+});
 export { News, NewsInfos, Employees };
