@@ -8,6 +8,10 @@ import {
   InferCreationAttributes,
   Model,
 } from 'sequelize';
+import Vehicles from './Vehicles.js';
+import VehiclesInfos from './VehiclesInfos.js';
+import ConstructionWorks from './ConstructionWorks.js';
+import ConstructionWorksInfos from './ConstructionWorksInfos.js';
 
 class News extends Model<InferAttributes<News>, InferCreationAttributes<News>> {
   declare id: CreationOptional<number>;
@@ -112,4 +116,4 @@ NewsInfos.belongsTo(News, {
   foreignKey: 'newsId',
   as: 'news',
 });
-export { News, NewsInfos, Employees };
+export { News, NewsInfos, Employees, Vehicles, VehiclesInfos, ConstructionWorks, ConstructionWorksInfos };

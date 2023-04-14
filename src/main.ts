@@ -12,8 +12,6 @@ import { __dirname } from './utils/conts.js';
 dotenv.config();
 const PORT = process.env.PORT || 5000;
 
-console.log(models);
-
 const app = express();
 app.use(express.json());
 app.use(

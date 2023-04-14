@@ -8,21 +8,17 @@ import {
   InferCreationAttributes,
   Model,
 } from 'sequelize';
-import News from './News.js';
+import Vechicles from './Vehicles.js';
 
-class NewsInfos extends Model<InferAttributes<NewsInfos>, InferCreationAttributes<NewsInfos>> {
+class VehiclesInfos extends Model<InferAttributes<VehiclesInfos>, InferCreationAttributes<VehiclesInfos>> {
   declare id: CreationOptional<number>;
   declare description: string;
-  declare newsId: ForeignKey<News['id']>;
+  declare vehicleId: ForeignKey<Vechicles['id']>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
-
-  declare static associations: {
-    infos: Association<NewsInfos, News>;
-  };
 }
 
-NewsInfos.init(
+VehiclesInfos.init(
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     description: { type: DataTypes.STRING, allowNull: false },
@@ -31,16 +27,18 @@ NewsInfos.init(
   },
   {
     sequelize: sequelize,
-    tableName: 'news-infos',
+    tableName: 'vehicles-infos',
   },
 );
 
-News.hasMany(NewsInfos, {
+Vechicles.hasMany(VehiclesInfos, {
   sourceKey: 'id',
-  foreignKey: 'newsId',
+  foreignKey: 'vehicleId',
   as: 'infos',
 });
-NewsInfos.belongsTo(News, {
-  foreignKey: 'newsId',
-  as: 'news',
+VehiclesInfos.belongsTo(Vechicles, {
+  foreignKey: 'vehicleId',
+  as: 'vehicle',
 });
+
+export default VehiclesInfos;
