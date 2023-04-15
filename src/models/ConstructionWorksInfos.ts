@@ -16,7 +16,7 @@ class ConstructionWorksInfos extends Model<
 > {
   declare id: CreationOptional<number>;
   declare description: string;
-  declare constructionworksId: ForeignKey<ConstructionWorks['id']>;
+  declare constructionWorkId: ForeignKey<ConstructionWorks['id']>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
@@ -36,11 +36,11 @@ ConstructionWorksInfos.init(
 
 ConstructionWorks.hasMany(ConstructionWorksInfos, {
   sourceKey: 'id',
-  foreignKey: 'constructionworksId',
+  foreignKey: 'constructionWorkId',
   as: 'infos',
 });
 ConstructionWorksInfos.belongsTo(ConstructionWorks, {
-  foreignKey: 'constructionworksId',
+  foreignKey: 'constructionWorkId',
   as: 'construction-works',
 });
 

@@ -63,7 +63,7 @@ class NewsController {
 
       const news = await News.findAndCountAll({
         where: whereSeacrhName,
-        include: [{ model: NewsInfos, as: 'infos', order: [['id', 'DESC']] }],
+        include: [{ model: NewsInfos, as: 'infos', order: [['id', 'ASC']] }],
         limit,
         offset,
         distinct: true,

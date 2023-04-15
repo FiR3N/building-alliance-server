@@ -17,7 +17,6 @@ class Vehicles extends Model<InferAttributes<Vehicles>, InferCreationAttributes<
   declare count: number;
   declare year_production: Date;
   declare price_per_hour: number;
-  //   declare userId: ForeignKey<UserModel["id"]>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }

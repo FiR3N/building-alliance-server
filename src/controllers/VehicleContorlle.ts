@@ -1,9 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
-import { News, NewsInfos, Vehicles, VehiclesInfos } from '../models/models.js';
+import { Vehicles, VehiclesInfos } from '../models/models.js';
 import { UploadedFile } from 'express-fileupload';
 import { __dirname } from '../utils/conts.js';
 import ApiError from '../exceptions/ApiError.js';
-import { Op } from 'sequelize';
 import VehicleService from '../services/VehicleService.js';
 
 class VehicleController {
@@ -68,7 +67,7 @@ class VehicleController {
   async getVehicles(req: Request, res: Response, next: NextFunction) {
     try {
       const vehicle = await Vehicles.findAll({
-        include: [{ model: VehiclesInfos, as: 'infos', order: [['id', 'DESC']] }],
+        include: [{ model: VehiclesInfos, as: 'infos', order: [['id', 'ASC']] }],
       });
 
       return res.status(200).json(vehicle);

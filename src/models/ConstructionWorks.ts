@@ -14,7 +14,7 @@ class ConstructionWorks extends Model<InferAttributes<ConstructionWorks>, InferC
   declare name: string;
   declare description: string;
   declare img: string;
-  declare price_per_hour: number;
+  declare price: number;
   declare value: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
@@ -27,7 +27,7 @@ ConstructionWorks.init(
     description: { type: DataTypes.STRING, allowNull: false },
     value: { type: DataTypes.STRING, allowNull: false },
     img: { type: DataTypes.STRING, allowNull: false },
-    price_per_hour: { type: DataTypes.DECIMAL, allowNull: false },
+    price: { type: DataTypes.DECIMAL, allowNull: false },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
