@@ -8,7 +8,7 @@ import { NextFunction } from 'express';
 import ApiError from '../exceptions/ApiError.js';
 
 class NewsService {
-  async addNews(name: string, description: string, img: UploadedFile, info: string) {
+  async addNews(name: string, description: string, img: UploadedFile, info: string, date: string) {
     let imgPathname: string;
 
     if (img) {
@@ -17,10 +17,14 @@ class NewsService {
     } else {
       imgPathname = NEWS_PLUG_IMG;
     }
+
+    // const newDate = new Date(date).toISOString().slice(0, 10)
+    const newDate = new Date(Date.parse(date));
     const news = await News.create({
       name,
       description,
       img: imgPathname,
+      date: newDate,
     });
 
     if (info) {
@@ -43,7 +47,7 @@ class NewsService {
     return newsWithInfos;
   }
 
-  async putNews(newsId: number, name: string, description: string, img: UploadedFile, info: string) {
+  async putNews(newsId: number, name: string, description: string, img: UploadedFile, info: string, date: string) {
     let imgPathname: string;
 
     if (img) {
@@ -53,11 +57,14 @@ class NewsService {
       imgPathname = NEWS_PLUG_IMG;
     }
 
+    const newDate = new Date(Date.parse(date));
+
     await News.update(
       {
         name,
         description,
         img: imgPathname,
+        date: newDate,
       },
       { where: { $id$: newsId } },
     );
