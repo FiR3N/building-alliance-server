@@ -8,7 +8,7 @@ import {
   InferCreationAttributes,
   Model,
 } from 'sequelize';
-import News from './News.js';
+import News from './NewsModel.js';
 
 class NewsImages extends Model<InferAttributes<NewsImages>, InferCreationAttributes<NewsImages>> {
   declare id: CreationOptional<number>;

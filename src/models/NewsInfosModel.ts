@@ -8,21 +8,21 @@ import {
   InferCreationAttributes,
   Model,
 } from 'sequelize';
-import News from './News.js';
+import NewsModel from './NewsModel.js';
 
-class NewsInfos extends Model<InferAttributes<NewsInfos>, InferCreationAttributes<NewsInfos>> {
+class NewsInfosModel extends Model<InferAttributes<NewsInfosModel>, InferCreationAttributes<NewsInfosModel>> {
   declare id: CreationOptional<number>;
   declare description: string;
-  declare newsId: ForeignKey<News['id']>;
+  declare newsId: ForeignKey<NewsModel['id']>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
   declare static associations: {
-    infos: Association<NewsInfos, News>;
+    infos: Association<NewsInfosModel, NewsModel>;
   };
 }
 
-NewsInfos.init(
+NewsInfosModel.init(
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     description: { type: DataTypes.TEXT, allowNull: false },
@@ -35,14 +35,14 @@ NewsInfos.init(
   },
 );
 
-News.hasMany(NewsInfos, {
+NewsModel.hasMany(NewsInfosModel, {
   sourceKey: 'id',
   foreignKey: 'newsId',
   as: 'infos',
 });
-NewsInfos.belongsTo(News, {
+NewsInfosModel.belongsTo(NewsModel, {
   foreignKey: 'newsId',
   as: 'news',
 });
 
-export default NewsInfos;
+export default NewsInfosModel;

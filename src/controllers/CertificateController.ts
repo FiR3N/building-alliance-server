@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { Certificates } from '../models/models.js';
+import { CertificatesModel } from '../models/models.js';
 import { UploadedFile } from 'express-fileupload';
 import { __dirname } from '../utils/conts.js';
 import ApiError from '../exceptions/ApiError.js';
@@ -49,7 +49,7 @@ class CertificateController {
   }
   async getCertificates(req: Request, res: Response, next: NextFunction) {
     try {
-      const certificates = await Certificates.findAll({});
+      const certificates = await CertificatesModel.findAll({});
       return res.status(200).json(certificates);
     } catch (e) {
       console.log(e);

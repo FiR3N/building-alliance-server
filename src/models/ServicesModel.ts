@@ -1,34 +1,26 @@
 import sequelize from '../db.js';
-import {
-  Association,
-  CreationOptional,
-  DataTypes,
-  ForeignKey,
-  InferAttributes,
-  InferCreationAttributes,
-  Model,
-} from 'sequelize';
+import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 
-class Certificates extends Model<InferAttributes<Certificates>, InferCreationAttributes<Certificates>> {
+class ServicesModel extends Model<InferAttributes<ServicesModel>, InferCreationAttributes<ServicesModel>> {
   declare id: CreationOptional<number>;
-  declare description: string;
+  declare name: string;
   declare image: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
-Certificates.init(
+ServicesModel.init(
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
-    description: { type: DataTypes.TEXT, allowNull: false },
+    name: { type: DataTypes.STRING, allowNull: false },
     image: { type: DataTypes.STRING, allowNull: false },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
   {
     sequelize: sequelize,
-    tableName: 'certificates',
+    tableName: 'services',
   },
 );
 
-export default Certificates;
+export default ServicesModel;

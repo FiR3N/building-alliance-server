@@ -1,5 +1,5 @@
 import Router from 'express';
-import VehicleContorlle from '../controllers/VehicleContorlle.js';
+import VehicleContorlle from '../controllers/delete/VehicleContorlle.js';
 
 const vehicleRouter = Router();
 vehicleRouter.get('/', VehicleContorlle.getVehicles);

@@ -1,4 +1,4 @@
-import { Certificates } from '../models/models.js';
+import { CertificatesModel } from '../models/models.js';
 import { CERTIFICATE_PLUG_IMG, __dirname } from '../utils/conts.js';
 import path from 'path';
 import { UploadedFile } from 'express-fileupload';
@@ -17,7 +17,7 @@ class CertificatesService {
       imgPathname = CERTIFICATE_PLUG_IMG;
     }
 
-    const certificate = await Certificates.create({
+    const certificate = await CertificatesModel.create({
       description,
       image: imgPathname,
     });
@@ -35,9 +35,9 @@ class CertificatesService {
       imgPathname = CERTIFICATE_PLUG_IMG;
     }
 
-    const certificate = await Certificates.findOne({ where: { $id$: certificateId } });
+    const certificate = await CertificatesModel.findOne({ where: { $id$: certificateId } });
 
-    await Certificates.update(
+    await CertificatesModel.update(
       {
         description,
         image: imgPathname,
@@ -49,7 +49,7 @@ class CertificatesService {
   }
 
   async deleteCertificate(certificateId: number, next: NextFunction) {
-    const certificate = await Certificates.findOne({ where: { $id$: certificateId } });
+    const certificate = await CertificatesModel.findOne({ where: { $id$: certificateId } });
     if (certificate)
       if (certificate?.image != CERTIFICATE_PLUG_IMG) {
         fs.unlink(path.resolve(__dirname, 'static', 'news', certificate?.image!), (err: any) => {
@@ -58,7 +58,7 @@ class CertificatesService {
         });
       }
 
-    await Certificates.destroy({ where: { $id$: certificateId } });
+    await CertificatesModel.destroy({ where: { $id$: certificateId } });
     return certificate;
   }
 }

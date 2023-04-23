@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { News, NewsInfos } from '../models/models.js';
+import { NewsModel, NewsInfosModel } from '../models/models.js';
 import { UploadedFile } from 'express-fileupload';
 import { __dirname } from '../utils/conts.js';
 import ApiError from '../exceptions/ApiError.js';
@@ -62,9 +62,9 @@ class NewsController {
       }
       let offset = page * limit - limit;
 
-      const news = await News.findAndCountAll({
+      const news = await NewsModel.findAndCountAll({
         where: whereSeacrhName,
-        include: [{ model: NewsInfos, as: 'infos', order: [['id', 'ASC']] }],
+        include: [{ model: NewsInfosModel, as: 'infos', order: [['id', 'ASC']] }],
         limit,
         offset,
         distinct: true,
@@ -80,7 +80,7 @@ class NewsController {
     try {
       let newsId = Number(req.params.newsId);
 
-      const news = await News.findOne({
+      const news = await NewsModel.findOne({
         where: { id: newsId },
       });
 

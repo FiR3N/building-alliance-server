@@ -4,11 +4,13 @@
 // import ConstructionWorksInfos from './ConstructionWorksInfos.js';
 // import Employees from './Employees.js';
 
-import News from './News.js';
-import NewsInfos from './NewsInfos.js';
-import Certificates from './Certificates.js';
+import NewsModel from './NewsModel.js';
+import NewsInfosModel from './NewsInfosModel.js';
+import CertificatesModel from './CertificatesModel.js';
+import ServiceModel from './ServicesModel.js';
+import ServicesInfosModel from './ServicesInfosModel.js';
 
 // Employees
 // Vehicles, VehiclesInfos, ConstructionWorks, ConstructionWorksInfos,
 
-export { News, NewsInfos, Certificates };
+export { NewsModel, NewsInfosModel, CertificatesModel, ServiceModel, ServicesInfosModel };

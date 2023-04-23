@@ -1,11 +1,10 @@
-import { News, NewsInfos } from '../models/models.js';
+import { NewsModel, NewsInfosModel } from '../models/models.js';
 import { NEWS_PLUG_IMG, __dirname } from '../utils/conts.js';
 import path from 'path';
 import { UploadedFile } from 'express-fileupload';
 import { v4 } from 'uuid';
 import fs from 'fs';
 import { NextFunction } from 'express';
-import ApiError from '../exceptions/ApiError.js';
 
 class NewsService {
   async addNews(name: string, description: string, img: UploadedFile, info: string, date: string) {
@@ -20,7 +19,7 @@ class NewsService {
 
     // const newDate = new Date(date).toISOString().slice(0, 10)
     const newDate = new Date(Date.parse(date));
-    const news = await News.create({
+    const news = await NewsModel.create({
       name,
       description,
       img: imgPathname,
@@ -31,7 +30,7 @@ class NewsService {
       let jsonInfo: any[] = JSON.parse(info);
       await Promise.all(
         jsonInfo.map((item) => {
-          return NewsInfos.create({
+          return NewsInfosModel.create({
             description: item.description,
             newsId: news.id,
           });
@@ -39,9 +38,9 @@ class NewsService {
       );
     }
 
-    const newsWithInfos = await News.findOne({
+    const newsWithInfos = await NewsModel.findOne({
       where: { id: news.id },
-      include: [{ model: NewsInfos, as: 'infos' }],
+      include: [{ model: NewsInfosModel, as: 'infos' }],
     });
 
     return newsWithInfos;
@@ -59,7 +58,7 @@ class NewsService {
 
     const newDate = new Date(Date.parse(date));
 
-    await News.update(
+    await NewsModel.update(
       {
         name,
         description,
@@ -69,7 +68,7 @@ class NewsService {
       { where: { $id$: newsId } },
     );
 
-    const infos = await NewsInfos.findAll({ where: { newsId: newsId } });
+    const infos = await NewsInfosModel.findAll({ where: { newsId: newsId } });
 
     const infosId = infos.map((item) => item.id);
 
@@ -78,9 +77,9 @@ class NewsService {
       await Promise.all(
         jsonInfo.map((item) => {
           if (infosId.includes(parseInt(item.id))) {
-            return NewsInfos.update({ description: item.description }, { where: { id: item.id } });
+            return NewsInfosModel.update({ description: item.description }, { where: { id: item.id } });
           } else {
-            return NewsInfos.create({
+            return NewsInfosModel.create({
               description: item.description,
               newsId: newsId,
             });
@@ -89,16 +88,16 @@ class NewsService {
       );
     }
 
-    const newsWithInfos = await News.findOne({
+    const newsWithInfos = await NewsModel.findOne({
       where: { id: newsId },
-      include: [{ model: NewsInfos, as: 'infos', order: [['id', 'DESC']] }],
+      include: [{ model: NewsInfosModel, as: 'infos', order: [['id', 'DESC']] }],
     });
 
     return newsWithInfos;
   }
 
   async deleteNews(newsId: number, next: NextFunction) {
-    const news = await News.findOne({ where: { $id$: newsId } });
+    const news = await NewsModel.findOne({ where: { $id$: newsId } });
     if (news)
       if (news?.img != NEWS_PLUG_IMG) {
         fs.unlink(path.resolve(__dirname, 'static', 'news', news?.img!), (err: any) => {
@@ -106,9 +105,9 @@ class NewsService {
           console.log(`news/${news?.img}.jpg was deleted`);
         });
       }
-    await NewsInfos.destroy({ where: { $newsId$: newsId } });
+    await NewsInfosModel.destroy({ where: { $newsId$: newsId } });
 
-    await News.destroy({ where: { $id$: newsId } });
+    await NewsModel.destroy({ where: { $id$: newsId } });
     return news;
   }
 }

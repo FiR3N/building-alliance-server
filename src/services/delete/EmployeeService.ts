@@ -1,13 +1,13 @@
 import nodemailer, { Transporter } from 'nodemailer';
 import SMTPTransport from 'nodemailer/lib/smtp-transport/index.js';
-import { Employees } from '../models/models.js';
-import { EMPLOYEE_PLUG_IMG, __dirname } from '../utils/conts.js';
+import { Employees } from '../../models/models.js';
+import { EMPLOYEE_PLUG_IMG, __dirname } from '../../utils/conts.js';
 import path from 'path';
 import { UploadedFile } from 'express-fileupload';
 import { v4 } from 'uuid';
 import fs from 'fs';
 import { NextFunction } from 'express';
-import ApiError from '../exceptions/ApiError.js';
+import ApiError from '../../exceptions/ApiError.js';
 
 class EmployeeService {
   async addEmployee(

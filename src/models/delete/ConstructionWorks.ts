@@ -1,30 +1,40 @@
-import sequelize from '../db.js';
-import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
+import sequelize from '../../db.js';
+import {
+  Association,
+  CreationOptional,
+  DataTypes,
+  ForeignKey,
+  InferAttributes,
+  InferCreationAttributes,
+  Model,
+} from 'sequelize';
 
-class News extends Model<InferAttributes<News>, InferCreationAttributes<News>> {
+class ConstructionWorks extends Model<InferAttributes<ConstructionWorks>, InferCreationAttributes<ConstructionWorks>> {
   declare id: CreationOptional<number>;
   declare name: string;
   declare description: string;
   declare img: string;
-  declare date: Date;
+  declare price: number;
+  declare value: string;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 }
 
-News.init(
+ConstructionWorks.init(
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false },
     description: { type: DataTypes.STRING, allowNull: false },
+    value: { type: DataTypes.STRING, allowNull: false },
     img: { type: DataTypes.STRING, allowNull: false },
-    date: { type: DataTypes.DATEONLY, allowNull: true },
+    price: { type: DataTypes.DECIMAL, allowNull: false },
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
   },
   {
     sequelize: sequelize,
-    tableName: 'news',
+    tableName: 'construction-works',
   },
 );
 
-export default News;
+export default ConstructionWorks;
