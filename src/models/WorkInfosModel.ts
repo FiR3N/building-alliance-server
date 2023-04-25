@@ -8,21 +8,21 @@ import {
   InferCreationAttributes,
   Model,
 } from 'sequelize';
-import ProjectModel from './ProjectModel.js';
+import WorkModel from './WorkModel.js';
 
-class ProjectInfosModel extends Model<InferAttributes<ProjectInfosModel>, InferCreationAttributes<ProjectInfosModel>> {
+class WorkInfosModel extends Model<InferAttributes<WorkInfosModel>, InferCreationAttributes<WorkInfosModel>> {
   declare id: CreationOptional<number>;
   declare description: string;
-  declare projectId: ForeignKey<ProjectModel['id']>;
+  declare workId: ForeignKey<WorkModel['id']>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
   declare static associations: {
-    infos: Association<ProjectInfosModel, ProjectModel>;
+    infos: Association<WorkInfosModel, WorkModel>;
   };
 }
 
-ProjectInfosModel.init(
+WorkInfosModel.init(
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     description: { type: DataTypes.TEXT, allowNull: false },
@@ -31,18 +31,18 @@ ProjectInfosModel.init(
   },
   {
     sequelize: sequelize,
-    tableName: 'projects-infos',
+    tableName: 'works-infos',
   },
 );
 
-ProjectModel.hasMany(ProjectInfosModel, {
+WorkModel.hasMany(WorkInfosModel, {
   sourceKey: 'id',
-  foreignKey: 'projectId',
+  foreignKey: 'workId',
   as: 'infos',
 });
-ProjectInfosModel.belongsTo(ProjectModel, {
-  foreignKey: 'projectId',
-  as: 'projects',
+WorkInfosModel.belongsTo(WorkModel, {
+  foreignKey: 'workId',
+  as: 'works',
 });
 
-export default ProjectInfosModel;
+export default WorkInfosModel;

@@ -8,24 +8,21 @@ import {
   InferCreationAttributes,
   Model,
 } from 'sequelize';
-import ProjectModel from './ProjectModel.js';
+import WorkModel from './WorkModel.js';
 
-class ProjectImagesModel extends Model<
-  InferAttributes<ProjectImagesModel>,
-  InferCreationAttributes<ProjectImagesModel>
-> {
+class WorkImagesModel extends Model<InferAttributes<WorkImagesModel>, InferCreationAttributes<WorkImagesModel>> {
   declare id: CreationOptional<number>;
   declare image: string;
-  declare projectId: ForeignKey<ProjectModel['id']>;
+  declare workId: ForeignKey<WorkModel['id']>;
   declare createdAt: CreationOptional<Date>;
   declare updatedAt: CreationOptional<Date>;
 
   declare static associations: {
-    images: Association<ProjectImagesModel, ProjectModel>;
+    images: Association<WorkImagesModel, WorkModel>;
   };
 }
 
-ProjectImagesModel.init(
+WorkImagesModel.init(
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     image: { type: DataTypes.STRING, allowNull: false },
@@ -34,17 +31,17 @@ ProjectImagesModel.init(
   },
   {
     sequelize: sequelize,
-    tableName: 'projects-images',
+    tableName: 'works-images',
   },
 );
 
-ProjectModel.hasMany(ProjectImagesModel, {
+WorkModel.hasMany(WorkImagesModel, {
   sourceKey: 'id',
-  foreignKey: 'projectId',
+  foreignKey: 'workId',
   as: 'images',
 });
-ProjectImagesModel.belongsTo(ProjectModel, {
-  foreignKey: 'projectId',
-  as: 'projects',
+WorkImagesModel.belongsTo(WorkModel, {
+  foreignKey: 'workId',
+  as: 'works',
 });
-export default ProjectImagesModel;
+export default WorkImagesModel;

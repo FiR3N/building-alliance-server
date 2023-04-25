@@ -9,9 +9,9 @@ import NewsInfosModel from './NewsInfosModel.js';
 import CertificatesModel from './CertificatesModel.js';
 import ServiceModel from './ServicesModel.js';
 import ServicesInfosModel from './ServicesInfosModel.js';
-import ProjectImagesModel from './ProjectImagesModel.js';
-import ProjectInfosModel from './ProjectInfosModel.js';
-import ProjectModel from './ProjectModel.js';
+import WorkImagesModel from './WorkImagesModel.js';
+import WorkInfosModel from './WorkInfosModel.js';
+import WorkModel from './WorkModel.js';
 
 // Employees
 // Vehicles, VehiclesInfos, ConstructionWorks, ConstructionWorksInfos,
@@ -22,7 +22,7 @@ export {
   CertificatesModel,
   ServiceModel,
   ServicesInfosModel,
-  ProjectModel,
-  ProjectInfosModel,
-  ProjectImagesModel,
+  WorkModel,
+  WorkInfosModel,
+  WorkImagesModel,
 };

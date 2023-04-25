@@ -1,7 +1,7 @@
 import sequelize from '../db.js';
 import { CreationOptional, DataTypes, InferAttributes, InferCreationAttributes, Model } from 'sequelize';
 
-class ProjectModel extends Model<InferAttributes<ProjectModel>, InferCreationAttributes<ProjectModel>> {
+class WorkModel extends Model<InferAttributes<WorkModel>, InferCreationAttributes<WorkModel>> {
   declare id: CreationOptional<number>;
   declare name: string;
   declare image: string;
@@ -11,7 +11,7 @@ class ProjectModel extends Model<InferAttributes<ProjectModel>, InferCreationAtt
   declare updatedAt: CreationOptional<Date>;
 }
 
-ProjectModel.init(
+WorkModel.init(
   {
     id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
     name: { type: DataTypes.STRING, allowNull: false },
@@ -22,8 +22,8 @@ ProjectModel.init(
   },
   {
     sequelize: sequelize,
-    tableName: 'projects',
+    tableName: 'works',
   },
 );
 
-export default ProjectModel;
+export default WorkModel;

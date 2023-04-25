@@ -3,7 +3,7 @@ import contactRouter from './contactRouter.js';
 import newsRouter from './newsRouter.js';
 import certificateRouter from './certificateRouter.js';
 import serviceRouter from './serviceRouter.js';
-import projectRouter from './projectRouter.js';
+import workRouter from './workRouter.js';
 
 // import employeRouter from './employeeRouter.js';
 // import vehicleRouter from './vehicleRouter.js';
@@ -15,7 +15,7 @@ router.use('/contact', contactRouter);
 router.use('/news', newsRouter);
 router.use('/certificates', certificateRouter);
 router.use('/services', serviceRouter);
-router.use('/projects', projectRouter);
+router.use('/works', workRouter);
 
 // router.use('/employee', employeRouter);
 // router.use('/vehicle', vehicleRouter);
