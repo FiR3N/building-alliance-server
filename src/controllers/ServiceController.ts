@@ -50,9 +50,19 @@ class ServiceController {
   }
   async getServices(req: Request, res: Response, next: NextFunction) {
     try {
-      const services = await ServiceModel.findAll({
+      let limit = Number(req.query.limit) || 9;
+      let page = Number(req.query.page) || 1;
+
+      let offset = page * limit - limit;
+
+      console.log(page, limit, offset);
+
+      const services = await ServiceModel.findAndCountAll({
         order: [['id', 'ASC']],
         include: [{ model: ServicesInfosModel, as: 'infos', order: [['id', 'ASC']] }],
+        limit,
+        offset,
+        distinct: true,
       });
 
       return res.status(200).json(services);

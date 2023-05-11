@@ -8,5 +8,6 @@ export default class ApiError extends Error {
   }
 
   static BadRequest = (message: string, errors: any[]) => new ApiError(400, message, errors);
+  static UnauthorizerError = () => new ApiError(401, 'Пользователь не авторизован', []);
   // static InternalError = (message: string, errors: any[]) => new ApiError(500, message, errors);
 }

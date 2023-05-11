@@ -10,9 +10,9 @@ class NewsController {
   async addNews(req: Request, res: Response, next: NextFunction) {
     try {
       const { name, description, info, date } = req.body;
-      let img = req.files?.img as UploadedFile;
+      let image = req.files?.image as UploadedFile;
 
-      const employeeWithInfo = await NewsService.addNews(name, description, img, info, date);
+      const employeeWithInfo = await NewsService.addNews(name, description, image, info, date);
 
       return res.status(200).json(employeeWithInfo);
     } catch (e: any) {
@@ -24,9 +24,9 @@ class NewsController {
     try {
       const newsId = Number(req.params.newsId);
       const { name, description, info, date } = req.body;
-      let img = req.files?.img as UploadedFile;
+      let image = req.files?.image as UploadedFile;
 
-      const news = await NewsService.putNews(newsId, name, description, img, info, date);
+      const news = await NewsService.putNews(newsId, name, description, image, info, date, next);
 
       return res.status(200).json(news);
     } catch (e) {
@@ -65,6 +65,10 @@ class NewsController {
       const news = await NewsModel.findAndCountAll({
         where: whereSeacrhName,
         include: [{ model: NewsInfosModel, as: 'infos', order: [['id', 'ASC']] }],
+        order: [
+          ['id', 'DESC'],
+          ['date', 'DESC'],
+        ],
         limit,
         offset,
         distinct: true,

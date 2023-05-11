@@ -46,17 +46,32 @@ class NewsService {
     return newsWithInfos;
   }
 
-  async putNews(newsId: number, name: string, description: string, img: UploadedFile, info: string, date: string) {
-    let imgPathname: string;
+  async putNews(
+    newsId: number,
+    name: string,
+    description: string,
+    image: UploadedFile,
+    info: string,
+    date: string,
+    next: NextFunction,
+  ) {
+    const news = await NewsModel.findOne({ where: { $id$: newsId } });
 
-    if (img) {
-      imgPathname = v4() + '.jpg';
-      img.mv(path.resolve(__dirname, 'static', 'employees', imgPathname));
-    } else {
-      imgPathname = NEWS_PLUG_IMG;
-    }
+    let imgPathname = news?.img;
 
     const newDate = new Date(Date.parse(date));
+
+    if (image) {
+      imgPathname = v4() + '.jpg';
+      image.mv(path.resolve(__dirname, 'static', 'news', imgPathname));
+
+      if (news?.img != NEWS_PLUG_IMG) {
+        fs.unlink(path.resolve(__dirname, 'static', 'news', news?.img!), (err: any) => {
+          if (err) next(err);
+          console.log(`news/${news?.img}.jpg was deleted`);
+        });
+      }
+    }
 
     await NewsModel.update(
       {
@@ -74,6 +89,7 @@ class NewsService {
 
     if (info) {
       let jsonInfo: any[] = JSON.parse(info);
+      //Добавление + изменение
       await Promise.all(
         jsonInfo.map((item) => {
           if (infosId.includes(parseInt(item.id))) {
@@ -83,6 +99,15 @@ class NewsService {
               description: item.description,
               newsId: newsId,
             });
+          }
+        }),
+      );
+      const jsonInfoIds = jsonInfo.map((item) => item.id);
+      //удаление
+      await Promise.all(
+        infosId.map((id) => {
+          if (!jsonInfoIds.includes(id)) {
+            return NewsInfosModel.destroy({ where: { $id$: id } });
           }
         }),
       );

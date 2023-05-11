@@ -12,6 +12,10 @@ import ServicesInfosModel from './ServicesInfosModel.js';
 import WorkImagesModel from './WorkImagesModel.js';
 import WorkInfosModel from './WorkInfosModel.js';
 import WorkModel from './WorkModel.js';
+import UserModel from './UserModel.js';
+import RoleModel from './RoleModel.js';
+import TokenModel from './TokenModel.js';
+import VacancyModel from './VacancyModel.js';
 
 // Employees
 // Vehicles, VehiclesInfos, ConstructionWorks, ConstructionWorksInfos,
@@ -25,4 +29,8 @@ export {
   WorkModel,
   WorkInfosModel,
   WorkImagesModel,
+  UserModel,
+  RoleModel,
+  TokenModel,
+  VacancyModel,
 };
