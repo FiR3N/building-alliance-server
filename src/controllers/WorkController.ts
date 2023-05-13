@@ -66,9 +66,10 @@ class WorkController {
 
       const works = await WorkModel.findAndCountAll({
         include: [
-          { model: WorkInfosModel, as: 'infos', order: [['id', 'ASC']] },
           { model: WorkImagesModel, as: 'images', order: [['id', 'ASC']] },
+          { model: WorkInfosModel, as: 'infos', order: [['id', 'ASC']] },
         ],
+        order: [['id', 'ASC']],
         limit,
         offset,
         distinct: true,

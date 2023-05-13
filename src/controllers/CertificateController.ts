@@ -25,7 +25,7 @@ class CertificateController {
       const { description } = req.body;
       let image = req.files?.img as UploadedFile;
 
-      const certificate = await CertificatesService.putCertificate(certificateId, description, image);
+      const certificate = await CertificatesService.putCertificate(certificateId, description, image, next);
 
       return res.status(200).json(certificate);
     } catch (e) {
@@ -49,7 +49,7 @@ class CertificateController {
   }
   async getCertificates(req: Request, res: Response, next: NextFunction) {
     try {
-      const certificates = await CertificatesModel.findAll({});
+      const certificates = await CertificatesModel.findAll({ order: [['id', 'ASC']] });
       return res.status(200).json(certificates);
     } catch (e) {
       console.log(e);

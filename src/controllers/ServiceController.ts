@@ -55,11 +55,8 @@ class ServiceController {
 
       let offset = page * limit - limit;
 
-      console.log(page, limit, offset);
-
       const services = await ServiceModel.findAndCountAll({
-        order: [['id', 'ASC']],
-        include: [{ model: ServicesInfosModel, as: 'infos', order: [['id', 'ASC']] }],
+        include: [{ model: ServicesInfosModel, as: 'infos', order: [['id', 'DESC']] }],
         limit,
         offset,
         distinct: true,

@@ -25,17 +25,22 @@ class CertificatesService {
     return certificate;
   }
 
-  async putCertificate(certificateId: number, description: string, img: UploadedFile) {
-    let imgPathname: string;
-
-    if (img) {
-      imgPathname = v4() + '.jpg';
-      img.mv(path.resolve(__dirname, 'static', 'certificates', imgPathname));
-    } else {
-      imgPathname = CERTIFICATE_PLUG_IMG;
-    }
-
+  async putCertificate(certificateId: number, description: string, image: UploadedFile, next: NextFunction) {
     const certificate = await CertificatesModel.findOne({ where: { $id$: certificateId } });
+
+    let imgPathname = certificate?.image;
+
+    if (image) {
+      imgPathname = v4() + '.jpg';
+      image.mv(path.resolve(__dirname, 'static', 'certificates', imgPathname));
+
+      if (certificate?.image != CERTIFICATE_PLUG_IMG) {
+        fs.unlink(path.resolve(__dirname, 'static', 'certificates', certificate?.image!), (err: any) => {
+          if (err) next(err);
+          console.log(`certificate/${certificate?.image}.jpg was deleted`);
+        });
+      }
+    }
 
     await CertificatesModel.update(
       {
@@ -45,7 +50,9 @@ class CertificatesService {
       { where: { $id$: certificateId } },
     );
 
-    return certificate;
+    const updatedCertificate = await CertificatesModel.findOne({ where: { $id$: certificateId } });
+
+    return updatedCertificate;
   }
 
   async deleteCertificate(certificateId: number, next: NextFunction) {

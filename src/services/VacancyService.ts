@@ -48,7 +48,7 @@ class VacancyService {
     return vacancy;
   }
   async getVacancies() {
-    const vacancies = await VacancyModel.findAll();
+    const vacancies = await VacancyModel.findAll({ order: [['id', 'ASC']] });
 
     return vacancies;
   }
