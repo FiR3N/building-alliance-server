@@ -9,6 +9,7 @@ import ApiError from '../exceptions/ApiError.js';
 import { compareSync, hash } from 'bcrypt';
 import { UserDto } from '../utils/UserDTO.js';
 import TokenService from './TokenService.js';
+import { Op, where } from 'sequelize';
 
 class UserService {
   async addUser(
@@ -20,7 +21,9 @@ class UserService {
     image: UploadedFile,
     roleId: number,
   ) {
-    const candidate = await UserModel.findOne({ where: { login: login } });
+    let lowerLogin = login.toLowerCase();
+
+    const candidate = await UserModel.findOne({ where: { login: lowerLogin } });
 
     if (candidate) {
       throw ApiError.BadRequest('Пользователь с таким логином уже создан!', []);
@@ -41,7 +44,7 @@ class UserService {
       surname,
       patronymic,
       image: imgPathname,
-      login: login,
+      login: lowerLogin,
       password: hashPassword,
       roleId: roleId,
     });
@@ -57,12 +60,27 @@ class UserService {
     name: string,
     surname: string,
     patronymic: string,
-    login: string,
     image: UploadedFile,
+    login: string,
+    password: string,
+    roleId: number,
     next: NextFunction,
-    password?: string,
-    roleId?: number,
   ) {
+    let lowerLogin = login.toLowerCase();
+
+    const candidate = await UserModel.findOne({
+      where: {
+        login: lowerLogin,
+        id: {
+          [Op.ne]: userId,
+        },
+      },
+    });
+
+    if (candidate) {
+      throw ApiError.BadRequest('Пользователь с таким логином уже существует!', []);
+    }
+
     const user = await UserModel.findOne({
       where: { id: userId },
     });
@@ -93,7 +111,7 @@ class UserService {
           surname,
           patronymic,
           image: imgPathname,
-          login: login,
+          login: lowerLogin,
           password: newPassword,
           roleId: roleId,
         },
@@ -105,8 +123,8 @@ class UserService {
           name,
           surname,
           patronymic,
+          login: lowerLogin,
           image: imgPathname,
-          login: login,
         },
         { where: { $id$: userId } },
       );
@@ -120,7 +138,53 @@ class UserService {
     const tokens = TokenService.generateTokens({ ...userDto });
     await TokenService.saveToken(userDto.id, tokens.refreshToken);
 
-    return { ...tokens, user: user };
+    return { ...tokens, user: updatedUser };
+  }
+  async putUserByUser(
+    userId: number,
+    name: string,
+    surname: string,
+    patronymic: string,
+    image: UploadedFile,
+    next: NextFunction,
+  ) {
+    const user = await UserModel.findOne({
+      where: { id: userId },
+    });
+
+    let imgPathname = user?.image;
+
+    if (image) {
+      imgPathname = v4() + '.jpg';
+      image.mv(path.resolve(__dirname, 'static', 'users', imgPathname));
+
+      if (user?.image != USER_PLUG_IMG) {
+        fs.unlink(path.resolve(__dirname, 'static', 'users', user?.image!), (err: any) => {
+          if (err) next(err);
+          console.log(`users/${user?.image}.jpg was deleted`);
+        });
+      }
+    }
+
+    await UserModel.update(
+      {
+        name,
+        surname,
+        patronymic,
+        image: imgPathname,
+      },
+      { where: { $id$: userId } },
+    );
+
+    const updatedUser = await UserModel.findOne({
+      where: { id: userId },
+    });
+
+    const userDto = new UserDto(updatedUser);
+    const tokens = TokenService.generateTokens({ ...userDto });
+    await TokenService.saveToken(userDto.id, tokens.refreshToken);
+
+    return { ...tokens, user: updatedUser };
   }
   async deleteUser(userId: number, next: NextFunction) {
     const user = await UserModel.findOne({ where: { $id$: userId } });
@@ -172,6 +236,10 @@ class UserService {
   async getUserById(userId: number) {
     const user = await UserModel.findOne({ where: { id: userId } });
     return user;
+  }
+  async getUsers() {
+    const users = await UserModel.findAll();
+    return users;
   }
 }
 

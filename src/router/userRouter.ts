@@ -3,7 +3,7 @@ import UserController from '../controllers/UserController.js';
 import authMiddleware from '../middleware/authMiddleware.js';
 
 const userRouter = Router();
-userRouter.get('/', authMiddleware); //getAll
+userRouter.get('/', authMiddleware, UserController.getUsers); //getAll
 userRouter.get('/refresh', UserController.refresh); // refresh
 userRouter.get('/:userId', authMiddleware, UserController.getUserById); //getOne
 userRouter.post('/logout', UserController.logout); // logout

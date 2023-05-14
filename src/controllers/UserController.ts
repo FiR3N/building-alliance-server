@@ -18,7 +18,7 @@ class UserController {
   async putUser(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = Number(req.params.userId);
-      const { name, surname, patronymic, login, password, roleId } = req.body;
+      const { name, surname, patronymic, password, login, roleId } = req.body;
       const image = req.files?.image as UploadedFile;
 
       const updatedUser = await UserService.putUser(
@@ -26,11 +26,11 @@ class UserController {
         name,
         surname,
         patronymic,
-        login,
         image,
-        next,
+        login,
         password,
         roleId,
+        next,
       );
 
       return res.status(200).json(updatedUser);
@@ -41,10 +41,10 @@ class UserController {
   async putUserByUser(req: Request, res: Response, next: NextFunction) {
     try {
       const userId = Number(req.params.userId);
-      const { name, surname, patronymic, login } = req.body;
+      const { name, surname, patronymic } = req.body;
       const image = req.files?.image as UploadedFile;
 
-      const updatedUser = await UserService.putUser(userId, name, surname, patronymic, login, image, next);
+      const updatedUser = await UserService.putUserByUser(userId, name, surname, patronymic, image, next);
 
       res.cookie('refreshToken', updatedUser.refreshToken, {
         maxAge: 30 * 24 * 60 * 60 * 1000,
@@ -114,6 +114,14 @@ class UserController {
       const userId = Number(req.params.userId);
       const user = await UserService.getUserById(userId);
       return res.json(user);
+    } catch (e) {
+      next(e);
+    }
+  }
+  async getUsers(req: Request, res: Response, next: NextFunction) {
+    try {
+      const users = await UserService.getUsers();
+      return res.json(users);
     } catch (e) {
       next(e);
     }
