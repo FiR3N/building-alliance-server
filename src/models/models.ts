@@ -1,9 +1,3 @@
-// import Vehicles from './Vehicles.js';
-// import VehiclesInfos from './VehiclesInfos.js';
-// import ConstructionWorks from './ConstructionWorks.js';
-// import ConstructionWorksInfos from './ConstructionWorksInfos.js';
-// import Employees from './Employees.js';
-
 import NewsModel from './NewsModel.js';
 import NewsInfosModel from './NewsInfosModel.js';
 import CertificatesModel from './CertificatesModel.js';
@@ -16,9 +10,6 @@ import UserModel from './UserModel.js';
 import RoleModel from './RoleModel.js';
 import TokenModel from './TokenModel.js';
 import VacancyModel from './VacancyModel.js';
-
-// Employees
-// Vehicles, VehiclesInfos, ConstructionWorks, ConstructionWorksInfos,
 
 export {
   NewsModel,

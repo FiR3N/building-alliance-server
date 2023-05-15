@@ -4,7 +4,6 @@ import { UploadedFile } from 'express-fileupload';
 import { __dirname } from '../utils/conts.js';
 import ApiError from '../exceptions/ApiError.js';
 import ServiceModelService from '../services/ServiceModelService.js';
-import { Op } from 'sequelize';
 
 class ServiceController {
   async addService(req: Request, res: Response, next: NextFunction) {
@@ -56,7 +55,11 @@ class ServiceController {
       let offset = page * limit - limit;
 
       const services = await ServiceModel.findAndCountAll({
-        include: [{ model: ServicesInfosModel, as: 'infos', order: [['id', 'DESC']] }],
+        include: [{ model: ServicesInfosModel, as: 'infos' }],
+        order: [
+          ['id', 'ASC'],
+          [{ model: ServicesInfosModel, as: 'infos' }, 'id'],
+        ],
         limit,
         offset,
         distinct: true,
@@ -74,6 +77,11 @@ class ServiceController {
 
       const service = await ServiceModel.findOne({
         where: { id: serviceId },
+        include: [{ model: ServicesInfosModel, as: 'infos' }],
+        order: [
+          ['id', 'ASC'],
+          [{ model: ServicesInfosModel, as: 'infos' }, 'id'],
+        ],
       });
 
       return res.status(200).json(service);
