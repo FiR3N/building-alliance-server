@@ -2,7 +2,6 @@ import ApiError from '../exceptions/ApiError.js';
 import TokenService from '../services/TokenService.js';
 export default function authMiddleware(req, res, next) {
     try {
-        console.log('>> start');
         if (req.method === 'OPTIONS') {
             next();
         }

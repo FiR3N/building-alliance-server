@@ -39,20 +39,29 @@ class WorkService {
         const workWithInfosAndImages = await WorkModel.findOne({
             where: { id: work.id },
             include: [
-                { model: WorkInfosModel, as: 'infos', order: [['id', 'ASC']] },
-                { model: WorkImagesModel, as: 'images', order: [['id', 'ASC']] },
+                { model: WorkInfosModel, as: 'infos' },
+                { model: WorkImagesModel, as: 'images' },
+            ],
+            order: [
+                [{ model: WorkInfosModel, as: 'infos' }, 'id'],
+                [{ model: WorkImagesModel, as: 'images' }, 'id'],
             ],
         });
         return workWithInfosAndImages;
     }
-    async putWork(workId, name, img, date, info, next, images) {
-        let imgPathname;
-        if (img) {
+    async putWork(workId, name, image, date, info, next, imageInfo, imageList) {
+        const work = await WorkModel.findOne({ where: { $id$: workId } });
+        let imgPathname = work === null || work === void 0 ? void 0 : work.image;
+        if (image) {
             imgPathname = v4() + '.jpg';
-            img.mv(path.resolve(__dirname, 'static', 'works', imgPathname));
-        }
-        else {
-            imgPathname = WORK_PLUG_IMG;
+            image.mv(path.resolve(__dirname, 'static', 'works', imgPathname));
+            if ((work === null || work === void 0 ? void 0 : work.image) != WORK_PLUG_IMG) {
+                fs.unlink(path.resolve(__dirname, 'static', 'works', work === null || work === void 0 ? void 0 : work.image), (err) => {
+                    if (err)
+                        next(err);
+                    console.log(`works/${work === null || work === void 0 ? void 0 : work.image}.jpg was deleted`);
+                });
+            }
         }
         const newDate = new Date(Date.parse(date));
         await WorkModel.update({
@@ -61,7 +70,9 @@ class WorkService {
             date: newDate,
         }, { where: { $id$: workId } });
         const infos = await WorkInfosModel.findAll({ where: { $workId$: workId } });
+        const imagesInfo = await WorkImagesModel.findAll({ where: { $workId$: workId } });
         const infosId = infos.map((item) => item.id);
+        const imagesInfoId = imagesInfo === null || imagesInfo === void 0 ? void 0 : imagesInfo.map((item) => item.id);
         if (info) {
             let jsonInfo = JSON.parse(info);
             await Promise.all(jsonInfo.map((item) => {
@@ -75,20 +86,30 @@ class WorkService {
                     });
                 }
             }));
+            const jsonInfoIds = jsonInfo.map((item) => item.id);
+            await Promise.all(infosId.map((id) => {
+                if (!jsonInfoIds.includes(id)) {
+                    return WorkInfosModel.destroy({ where: { $id$: id } });
+                }
+            }));
         }
-        if (images) {
-            const imageList = await WorkImagesModel.findAll({ where: { $workId$: workId } });
-            imageList.map((workImage) => {
-                if (workImage.image != WORK_PLUG_IMG) {
-                    fs.unlink(path.resolve(__dirname, 'static', 'works', workImage === null || workImage === void 0 ? void 0 : workImage.image), (err) => {
+        if (imageInfo) {
+            let jsonImageInfo = JSON.parse(imageInfo);
+            const jsonInfoIds = jsonImageInfo.map((item) => item.id);
+            await Promise.all(imagesInfoId.map((id) => {
+                if (!jsonInfoIds.includes(id)) {
+                    const deleteItem = imagesInfo.find((item) => item.id === id);
+                    fs.unlink(path.resolve(__dirname, 'static', 'works', deleteItem === null || deleteItem === void 0 ? void 0 : deleteItem.image), (err) => {
                         if (err)
                             next(err);
-                        console.log(`works/${workImage === null || workImage === void 0 ? void 0 : workImage.image}.jpg was deleted`);
+                        console.log(`works/${deleteItem === null || deleteItem === void 0 ? void 0 : deleteItem.image}.jpg was deleted`);
                     });
+                    return WorkImagesModel.destroy({ where: { $id$: id } });
                 }
-            });
-            await WorkImagesModel.destroy({ where: { $workId$: workId } });
-            const promises = images.map(async (image) => {
+            }));
+        }
+        if (imageList) {
+            const promises = imageList.map(async (image) => {
                 let imageName = v4() + '.jpg';
                 await image.mv(path.resolve(__dirname, 'static', 'works', imageName));
                 await WorkImagesModel.create({ image: imageName, workId: workId });
@@ -98,8 +119,13 @@ class WorkService {
         const workWithInfosAndImages = await WorkModel.findOne({
             where: { id: workId },
             include: [
-                { model: WorkInfosModel, as: 'infos', order: [['id', 'ASC']] },
-                { model: WorkImagesModel, as: 'images', order: [['id', 'ASC']] },
+                { model: WorkInfosModel, as: 'infos' },
+                { model: WorkImagesModel, as: 'images' },
+            ],
+            order: [
+                ['date', 'ASC'],
+                [{ model: WorkInfosModel, as: 'infos' }, 'id'],
+                [{ model: WorkImagesModel, as: 'images' }, 'id'],
             ],
         });
         return workWithInfosAndImages;

@@ -11,7 +11,7 @@ class MailService {
             },
         });
     }
-    async sendEmalFromUser(name, surname, email, text, subject, companyName, telephone) {
+    async sendEmailFromUser(name, surname, email, text, subject, companyName, telephone) {
         await this.trasporter.sendMail({
             from: email,
             to: process.env.SMPTP_USER,
@@ -25,6 +25,18 @@ class MailService {
  
       <div>${text}</div>
       `,
+        });
+    }
+    async sendVacancyEmailFromUser(name, surname, patronymic, email, telephone, text, vacancyName) {
+        await this.trasporter.sendMail({
+            from: process.env.SMPTP_USER,
+            to: process.env.SMPTP_USER,
+            subject: `Заявка на вакансию: ${vacancyName}`,
+            text: text,
+            html: `<div style="margin-bottom: 10px; font-weight: bold;">Почта пользователя: <span style="font-weight: 500">${email}</span></div>
+      <div style="margin-bottom: 10px; font-weight: bold;">ФИО пользователя: <span style="font-weight: 500">${surname} ${name} ${patronymic} </span></div>
+      <div style="margin-bottom: 10px; font-weight: bold;">Телефон пользователя: <span style="font-weight: 500">${telephone}</span></div>
+      <div style="margin-bottom: 10px; font-weight: bold;">Дополнительный текст: <span style="font-weight: 500">${text}</span></div>`,
         });
     }
 }

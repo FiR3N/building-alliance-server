@@ -1,7 +1,6 @@
 import VacancyModel from '../models/VacancyModel.js';
 class VacancyService {
     async addVacancy(name, wage, experience, occupation, description) {
-        console.log(`exp >> ` + experience);
         const vacancy = await VacancyModel.create({
             name: name,
             wage,

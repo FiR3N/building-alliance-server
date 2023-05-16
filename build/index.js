@@ -32,4 +32,4 @@ const start = async () => {
     }
 };
 start();
-//# sourceMappingURL=main.js.map
+//# sourceMappingURL=index.js.map
