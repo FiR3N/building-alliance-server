@@ -1,0 +1,1 @@
+{"version":3,"file":"roleRouter.js","sourceRoot":"","sources":["../../src/router/roleRouter.ts"],"names":[],"mappings":"AAAA,OAAO,MAAM,MAAM,SAAS,CAAC;AAC7B,OAAO,cAAc,MAAM,kCAAkC,CAAC;AAE9D,MAAM,UAAU,GAAG,MAAM,EAAE,CAAC;AAE5B,UAAU,CAAC,GAAG,CAAC,UAAU,EAAE,cAAc,CAAC,WAAW,CAAC,CAAC;AAEvD,eAAe,UAAU,CAAC"}

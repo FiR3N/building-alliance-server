@@ -1,0 +1,20 @@
+import Router from 'express';
+import contactRouter from './contactRouter.js';
+import newsRouter from './newsRouter.js';
+import certificateRouter from './certificateRouter.js';
+import serviceRouter from './serviceRouter.js';
+import workRouter from './workRouter.js';
+import userRouter from './userRouter.js';
+import roleRouter from './roleRouter.js';
+import vacancyRouter from './vacanciesRouter.js';
+const router = Router();
+router.use('/contact', contactRouter);
+router.use('/news', newsRouter);
+router.use('/certificates', certificateRouter);
+router.use('/services', serviceRouter);
+router.use('/works', workRouter);
+router.use('/vacancies', vacancyRouter);
+router.use('/users', userRouter);
+router.use('/roles', roleRouter);
+export default router;
+//# sourceMappingURL=index.js.map

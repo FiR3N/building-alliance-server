@@ -9,7 +9,7 @@
   "type": "module",
   "scripts": {
     "dev": "yarn nodemon",
-    "build": " rimraf ./build && yarn tsc",
+    "build": "yarn tsc",
     "start": "yarn run build && node build/main"
   },
   "devDependencies": {
