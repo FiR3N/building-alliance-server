@@ -125,6 +125,7 @@ class UserService {
           patronymic,
           login: lowerLogin,
           image: imgPathname,
+          roleId: roleId,
         },
         { where: { $id$: userId } },
       );

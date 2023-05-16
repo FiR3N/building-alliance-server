@@ -1,7 +1,8 @@
 import jwt from 'jsonwebtoken';
 import TokenModel from '../models/TokenModel.js';
+import { UserDto } from '../utils/UserDTO.js';
 class TokenService {
-  generateTokens(payload: any) {
+  generateTokens(payload: UserDto) {
     const accessToken = jwt.sign(payload, process.env.JWT_ACCESS_SECRET_KEY as string, {
       expiresIn: '30m',
     });
@@ -16,7 +17,7 @@ class TokenService {
 
   validateAccessToken(token: any) {
     try {
-      const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET_KEY as string);
+      const userData = jwt.verify(token, process.env.JWT_ACCESS_SECRET_KEY as string) as UserDto;
       return userData;
     } catch (e) {
       return null;
@@ -25,7 +26,7 @@ class TokenService {
 
   validateRefreshToken(token: any) {
     try {
-      const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET_KEY as string);
+      const userData = jwt.verify(token, process.env.JWT_REFRESH_SECRET_KEY as string) as UserDto;
       return userData;
     } catch (e) {
       return null;

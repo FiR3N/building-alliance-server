@@ -10,7 +10,15 @@ class WorkController {
     try {
       const { name, info, date } = req.body;
       let image = req.files?.image as UploadedFile;
-      let imageList = req.files?.imageList as UploadedFile[];
+
+      const uploadedFiles = req.files;
+      const imageList = [];
+
+      for (const key in uploadedFiles) {
+        if (key.startsWith('imageList[')) {
+          imageList.push(uploadedFiles[key]);
+        }
+      }
 
       const workWithInfosAndImages = await WorkService.addWork(name, image, date, info, imageList);
 
@@ -23,9 +31,16 @@ class WorkController {
   async putWork(req: Request, res: Response, next: NextFunction) {
     try {
       const workId = Number(req.params.workId);
-      const { name, info, date } = req.body;
+      const { name, info, date, imageInfo } = req.body;
       let img = req.files?.image as UploadedFile;
-      let imageList = req.files?.imageList as UploadedFile[];
+      const uploadedFiles = req.files;
+      const imageList = [];
+
+      for (const key in uploadedFiles) {
+        if (key.startsWith('imageList[')) {
+          imageList.push(uploadedFiles[key]);
+        }
+      }
 
       const updatedWorkWithInfosAndImages = await WorkService.putWork(
         workId,
@@ -34,11 +49,13 @@ class WorkController {
         date,
         info,
         next,
+        imageInfo,
         imageList && imageList,
       );
 
       return res.status(200).json(updatedWorkWithInfosAndImages);
-    } catch (e) {
+    } catch (e: any) {
+      console.log(e.message);
       next(e);
     }
   }
@@ -66,10 +83,14 @@ class WorkController {
 
       const works = await WorkModel.findAndCountAll({
         include: [
-          { model: WorkImagesModel, as: 'images', order: [['id', 'ASC']] },
-          { model: WorkInfosModel, as: 'infos', order: [['id', 'ASC']] },
+          { model: WorkImagesModel, as: 'images' },
+          { model: WorkInfosModel, as: 'infos' },
         ],
-        order: [['id', 'ASC']],
+        order: [
+          ['date', 'ASC'],
+          [{ model: WorkInfosModel, as: 'infos' }, 'id'],
+          [{ model: WorkImagesModel, as: 'images' }, 'id'],
+        ],
         limit,
         offset,
         distinct: true,
@@ -87,8 +108,12 @@ class WorkController {
       const workWithInfosAndImages = await WorkModel.findOne({
         where: { id: workId },
         include: [
-          { model: WorkInfosModel, as: 'infos', order: [['id', 'ASC']] },
-          { model: WorkImagesModel, as: 'images', order: [['id', 'ASC']] },
+          { model: WorkInfosModel, as: 'infos' },
+          { model: WorkImagesModel, as: 'images' },
+        ],
+        order: [
+          [{ model: WorkInfosModel, as: 'infos' }, 'id'],
+          [{ model: WorkImagesModel, as: 'images' }, 'id'],
         ],
       });
 

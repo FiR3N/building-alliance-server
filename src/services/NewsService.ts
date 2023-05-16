@@ -17,7 +17,6 @@ class NewsService {
       imgPathname = NEWS_PLUG_IMG;
     }
 
-    // const newDate = new Date(date).toISOString().slice(0, 10)
     const newDate = new Date(Date.parse(date));
     const news = await NewsModel.create({
       name,

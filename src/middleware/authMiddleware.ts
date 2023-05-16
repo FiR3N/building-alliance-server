@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from 'express';
 import ApiError from '../exceptions/ApiError.js';
 import TokenService from '../services/TokenService.js';
+import { UserDto } from '../utils/UserDTO.js';
 
 interface CustomRequest extends Request {
   user?: any;
@@ -8,7 +9,6 @@ interface CustomRequest extends Request {
 
 export default function authMiddleware(req: CustomRequest, res: Response, next: NextFunction) {
   try {
-    console.log('>> start');
     if (req.method === 'OPTIONS') {
       next();
     }
@@ -23,6 +23,7 @@ export default function authMiddleware(req: CustomRequest, res: Response, next: 
       return next(ApiError.UnauthorizerError());
     }
     const userData = TokenService.validateAccessToken(accessToken);
+
     if (!userData) {
       return next(ApiError.UnauthorizerError());
     }
