@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "yarn nodemon",
     "build": "rimraf ./build && yarn tsc",
+    "build-for-render": "rm -rf ./build && yarn tsc",
     "start": "yarn run build && node build/main"
   },
   "devDependencies": {
