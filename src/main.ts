@@ -32,10 +32,11 @@ app.use(errorMiddleware);
 app.use('/', (req, res) => {
   res.send('Welcome to the server home page!');
 });
+
 const start = async () => {
   try {
-    await sequelize.authenticate();
-    await sequelize.sync();
+    // await sequelize.authenticate();
+    // await sequelize.sync();
 
     app.listen(Number(PORT), '0.0.0.0', () => console.log(`Server started on PORT: ${PORT}`));
   } catch (e: any) {
