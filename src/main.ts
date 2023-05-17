@@ -29,7 +29,9 @@ app.use(fileUpload({}));
 
 app.use('/api', router);
 app.use(errorMiddleware);
-
+app.use('/', (req, res) => {
+  res.send('Welcome to the server home page!');
+});
 const start = async () => {
   try {
     await sequelize.authenticate();
