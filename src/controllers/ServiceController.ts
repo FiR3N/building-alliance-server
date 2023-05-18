@@ -25,7 +25,7 @@ class ServiceController {
       const { name, info } = req.body;
       let image = req.files?.image as UploadedFile;
 
-      const service = await ServiceModelService.putService(serviceId, name, image, info);
+      const service = await ServiceModelService.putService(serviceId, name, image, info, next);
 
       return res.status(200).json(service);
     } catch (e) {

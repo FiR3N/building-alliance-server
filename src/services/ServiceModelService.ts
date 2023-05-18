@@ -42,14 +42,21 @@ class ServiceModelService {
     return serviceWithInfos;
   }
 
-  async putService(serviceId: number, name: string, img: UploadedFile, info: string) {
-    let imgPathname: string;
+  async putService(serviceId: number, name: string, image: UploadedFile, info: string, next: NextFunction) {
+    const service = await ServiceModel.findOne({ where: { $id$: serviceId } });
 
-    if (img) {
+    let imgPathname = service?.image;
+
+    if (image) {
       imgPathname = v4() + '.jpg';
-      img.mv(path.resolve(__dirname, 'static', 'services', imgPathname));
-    } else {
-      imgPathname = SERVICE_PLUG_IMG;
+      image.mv(path.resolve(__dirname, 'static', 'services', imgPathname));
+
+      if (service?.image != SERVICE_PLUG_IMG) {
+        fs.unlink(path.resolve(__dirname, 'static', 'services', service?.image!), (err: any) => {
+          if (err) next(err);
+          console.log(`service/${service?.image}.jpg was deleted`);
+        });
+      }
     }
 
     await ServiceModel.update(
@@ -75,6 +82,16 @@ class ServiceModelService {
               description: item.description,
               serviceId: serviceId,
             });
+          }
+        }),
+      );
+
+      const jsonInfoIds = jsonInfo.map((item) => item.id);
+      //удаление
+      await Promise.all(
+        infosId.map((id) => {
+          if (!jsonInfoIds.includes(id)) {
+            return ServicesInfosModel.destroy({ where: { $id$: id } });
           }
         }),
       );

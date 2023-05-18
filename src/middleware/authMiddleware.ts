@@ -1,7 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 import ApiError from '../exceptions/ApiError.js';
 import TokenService from '../services/TokenService.js';
-import { UserDto } from '../utils/UserDTO.js';
 
 interface CustomRequest extends Request {
   user?: any;
