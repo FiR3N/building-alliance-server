@@ -87,7 +87,7 @@ class WorkController {
           { model: WorkInfosModel, as: 'infos' },
         ],
         order: [
-          ['date', 'ASC'],
+          ['date', 'DESC'],
           [{ model: WorkInfosModel, as: 'infos' }, 'id'],
           [{ model: WorkImagesModel, as: 'images' }, 'id'],
         ],
