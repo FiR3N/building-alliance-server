@@ -7,6 +7,8 @@ import workRouter from './workRouter.js';
 import userRouter from './userRouter.js';
 import roleRouter from './roleRouter.js';
 import vacancyRouter from './vacanciesRouter.js';
+import mixturesRouter from './mixturesRouter.js';
+import mixtureTypesRouter from './mixtureTypesRouter.js';
 
 // import employeRouter from './employeeRouter.js';
 // import vehicleRouter from './vehicleRouter.js';
@@ -22,6 +24,8 @@ router.use('/works', workRouter);
 router.use('/vacancies', vacancyRouter);
 router.use('/users', userRouter);
 router.use('/roles', roleRouter);
+router.use('/mixtures', mixturesRouter);
+router.use('/mixture-types', mixtureTypesRouter);
 
 // router.use('/employee', employeRouter);
 // router.use('/vehicle', vehicleRouter);
