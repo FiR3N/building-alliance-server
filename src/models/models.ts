@@ -11,11 +11,13 @@ import RoleModel from './RoleModel.js';
 import TokenModel from './TokenModel.js';
 import VacancyModel from './VacancyModel.js';
 import MixturesModel from './MixturesModel.js';
+import CertificatesImagesModel from './CertificatesImagesModel.js';
 
 export {
   NewsModel,
   NewsInfosModel,
   CertificatesModel,
+  CertificatesImagesModel,
   ServiceModel,
   ServicesInfosModel,
   WorkModel,

@@ -12,11 +12,11 @@ class WorkController {
       let image = req.files?.image as UploadedFile;
 
       const uploadedFiles = req.files;
-      const imageList = [];
+      const imageList = [] as UploadedFile[];
 
       for (const key in uploadedFiles) {
         if (key.startsWith('imageList[')) {
-          imageList.push(uploadedFiles[key]);
+          imageList.push(uploadedFiles[key] as UploadedFile);
         }
       }
 
@@ -34,11 +34,11 @@ class WorkController {
       const { name, info, date, imageInfo } = req.body;
       let img = req.files?.image as UploadedFile;
       const uploadedFiles = req.files;
-      const imageList = [];
+      const imageList = [] as UploadedFile[];
 
       for (const key in uploadedFiles) {
         if (key.startsWith('imageList[')) {
-          imageList.push(uploadedFiles[key]);
+          imageList.push(uploadedFiles[key] as UploadedFile);
         }
       }
 

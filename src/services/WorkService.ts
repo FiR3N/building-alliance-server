@@ -7,7 +7,7 @@ import fs from 'fs';
 import { NextFunction } from 'express';
 
 class WorkService {
-  async addWork(name: string, img: UploadedFile, date: string, info: string, images: any[]) {
+  async addWork(name: string, img: UploadedFile, date: string, info: string, images: UploadedFile[]) {
     let imgPathname: string;
     if (img) {
       imgPathname = v4() + '.jpg';
@@ -63,7 +63,7 @@ class WorkService {
     info: string,
     next: NextFunction,
     imageInfo: string,
-    imageList?: any[],
+    imageList?: UploadedFile[],
   ) {
     const work = await WorkModel.findOne({ where: { $id$: workId } });
 

@@ -1,5 +1,5 @@
 import { NextFunction, Request, Response } from 'express';
-import { CertificatesModel } from '../models/models.js';
+import { CertificatesImagesModel, CertificatesModel } from '../models/models.js';
 import { UploadedFile } from 'express-fileupload';
 import { __dirname } from '../utils/conts.js';
 import ApiError from '../exceptions/ApiError.js';
@@ -11,7 +11,16 @@ class CertificateController {
       const { description } = req.body;
       let image = req.files?.image as UploadedFile;
 
-      const certificate = await CertificatesService.addCertificate(description, image);
+      const uploadedFiles = req.files;
+      const imageList = [] as UploadedFile[];
+
+      for (const key in uploadedFiles) {
+        if (key.startsWith('imageList[')) {
+          imageList.push(uploadedFiles[key] as UploadedFile);
+        }
+      }
+
+      const certificate = await CertificatesService.addCertificate(description, image, imageList);
 
       return res.status(200).json(certificate);
     } catch (e: any) {
@@ -22,10 +31,26 @@ class CertificateController {
   async putCertificate(req: Request, res: Response, next: NextFunction) {
     try {
       const certificateId = Number(req.params.certificateId);
-      const { description } = req.body;
-      let image = req.files?.img as UploadedFile;
+      const { description, imageInfo } = req.body;
+      let image = req.files?.image as UploadedFile;
+      const uploadedFiles = req.files;
 
-      const certificate = await CertificatesService.putCertificate(certificateId, description, image, next);
+      const imageList = [] as UploadedFile[];
+
+      for (const key in uploadedFiles) {
+        if (key.startsWith('imageList[')) {
+          imageList.push(uploadedFiles[key] as UploadedFile);
+        }
+      }
+
+      const certificate = await CertificatesService.putCertificate(
+        certificateId,
+        description,
+        image,
+        next,
+        imageInfo,
+        imageList,
+      );
 
       return res.status(200).json(certificate);
     } catch (e) {
@@ -49,7 +74,13 @@ class CertificateController {
   }
   async getCertificates(req: Request, res: Response, next: NextFunction) {
     try {
-      const certificates = await CertificatesModel.findAll({ order: [['id', 'ASC']] });
+      const certificates = await CertificatesModel.findAll({
+        include: [{ model: CertificatesImagesModel, as: 'images' }],
+        order: [
+          ['id', 'ASC'],
+          [{ model: CertificatesImagesModel, as: 'images' }, 'id'],
+        ],
+      });
       return res.status(200).json(certificates);
     } catch (e) {
       console.log(e);
