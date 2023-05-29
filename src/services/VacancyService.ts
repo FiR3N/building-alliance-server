@@ -45,8 +45,9 @@ class VacancyService {
 
     return vacancy;
   }
-  async getVacancies() {
-    const vacancies = await VacancyModel.findAll({ order: [['id', 'ASC']] });
+  async getVacancies(limit: number, page: number) {
+    let offset = page * limit - limit;
+    const vacancies = await VacancyModel.findAndCountAll({ order: [['id', 'DESC']], limit, offset, distinct: true });
 
     return vacancies;
   }

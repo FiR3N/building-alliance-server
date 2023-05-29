@@ -86,6 +86,11 @@ class NewsController {
 
       const news = await NewsModel.findOne({
         where: { id: newsId },
+        include: [{ model: NewsInfosModel, as: 'infos', order: [['id', 'ASC']] }],
+        order: [
+          ['id', 'DESC'],
+          ['date', 'DESC'],
+        ],
       });
 
       return res.status(200).json(news);

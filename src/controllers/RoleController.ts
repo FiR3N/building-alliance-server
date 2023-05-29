@@ -13,6 +13,15 @@ class RoleController {
       next(e);
     }
   }
+  async getRoles(req: Request, res: Response, next: NextFunction) {
+    try {
+      const roles = await RoleModel.findAll();
+      return res.status(200).json(roles);
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
+  }
 }
 
 export default new RoleController();

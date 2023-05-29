@@ -54,7 +54,10 @@ class VacancyController {
   }
   async getVacancies(req: Request, res: Response, next: NextFunction) {
     try {
-      const vacancies = await VacancyService.getVacancies();
+      let limit = Number(req.query.limit) || 9;
+      let page = Number(req.query.page) || 1;
+
+      const vacancies = await VacancyService.getVacancies(limit, page);
 
       return res.status(200).json(vacancies);
     } catch (e) {

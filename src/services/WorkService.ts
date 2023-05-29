@@ -15,6 +15,7 @@ class WorkService {
     } else {
       imgPathname = WORK_PLUG_IMG;
     }
+
     const newDate = new Date(Date.parse(date));
 
     const work = await WorkModel.create({
