@@ -6,8 +6,8 @@ import MixturesController from '../controllers/MixturesController.js';
 const mixturesRouter = Router();
 mixturesRouter.get('/', MixturesController.getMixtures);
 mixturesRouter.get('/:mixtureTypeId', MixturesController.getMixturesByTypeId);
-mixturesRouter.post('/', MixturesController.addMixture);
+mixturesRouter.post('/', authMiddleware, checkRoleMiddleware([1, 3]), MixturesController.addMixture);
 mixturesRouter.delete('/:mixtureId', authMiddleware, checkRoleMiddleware([1, 3]), MixturesController.deleteMixture);
-mixturesRouter.put('/:mixtureId', authMiddleware, checkRoleMiddleware([1, 3]), MixturesController.deleteMixture);
+mixturesRouter.put('/:mixtureId', authMiddleware, checkRoleMiddleware([1, 3]), MixturesController.putMixture);
 
 export default mixturesRouter;

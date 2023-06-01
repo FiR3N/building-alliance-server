@@ -22,6 +22,26 @@ class ContactController {
       next(e);
     }
   }
+  async sendMixtureOrder(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { name, phone, address, email, count, price, mixtureType, mixture, text } = req.body;
+      await MailService.sendMixtureOrder(name, phone, address, email, count, price, mixtureType, mixture, text);
+      return res.status(200).json('Сообщение отправлено');
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
+  }
+  async sendVehicleOrder(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { name, phone, address, email, hoursCount, price, vehicle, date, text } = req.body;
+      await MailService.sendVehicleOrder(name, phone, address, email, hoursCount, price, vehicle, date, text);
+      return res.status(200).json('Сообщение отправлено');
+    } catch (e) {
+      console.log(e);
+      next(e);
+    }
+  }
 }
 
 export default new ContactController();

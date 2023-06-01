@@ -11,7 +11,9 @@ import RoleModel from './RoleModel.js';
 import TokenModel from './TokenModel.js';
 import VacancyModel from './VacancyModel.js';
 import MixturesModel from './MixturesModel.js';
+import MixtureTypesModel from './MixtureTypesModel.js';
 import CertificatesImagesModel from './CertificatesImagesModel.js';
+import VehicleModel from './VehicleModel.js';
 
 export {
   NewsModel,
@@ -28,4 +30,6 @@ export {
   TokenModel,
   VacancyModel,
   MixturesModel,
+  MixtureTypesModel,
+  VehicleModel,
 };
