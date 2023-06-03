@@ -20,7 +20,6 @@ class VehicleController {
     try {
       const vehicleId = Number(req.params.vehicleId);
       const { name, priceWithVAT, priceWithoutVAT } = req.body;
-
       const updatedVehicle = await VehicleService.putVehicle(vehicleId, name, priceWithVAT, priceWithoutVAT);
 
       return res.status(200).json(updatedVehicle);
