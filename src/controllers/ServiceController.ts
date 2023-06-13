@@ -52,18 +52,7 @@ class ServiceController {
       let limit = Number(req.query.limit) || 9;
       let page = Number(req.query.page) || 1;
 
-      let offset = page * limit - limit;
-
-      const services = await ServiceModel.findAndCountAll({
-        include: [{ model: ServicesInfosModel, as: 'infos' }],
-        order: [
-          ['id', 'ASC'],
-          [{ model: ServicesInfosModel, as: 'infos' }, 'id'],
-        ],
-        limit,
-        offset,
-        distinct: true,
-      });
+      const services = await ServiceModelService.getServices(limit, page);
 
       return res.status(200).json(services);
     } catch (e) {
@@ -75,14 +64,7 @@ class ServiceController {
     try {
       let serviceId = Number(req.params.serviceId);
 
-      const service = await ServiceModel.findOne({
-        where: { id: serviceId },
-        include: [{ model: ServicesInfosModel, as: 'infos' }],
-        order: [
-          ['id', 'ASC'],
-          [{ model: ServicesInfosModel, as: 'infos' }, 'id'],
-        ],
-      });
+      const service = await ServiceModelService.getServiceById(serviceId);
 
       return res.status(200).json(service);
     } catch (e) {

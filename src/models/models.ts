@@ -14,6 +14,7 @@ import MixturesModel from './MixturesModel.js';
 import MixtureTypesModel from './MixtureTypesModel.js';
 import CertificatesImagesModel from './CertificatesImagesModel.js';
 import VehicleModel from './VehicleModel.js';
+import ReviewsModel from './ReviewsModel.js';
 
 export {
   NewsModel,
@@ -32,4 +33,5 @@ export {
   MixturesModel,
   MixtureTypesModel,
   VehicleModel,
+  ReviewsModel,
 };

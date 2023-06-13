@@ -119,6 +119,36 @@ class ServiceModelService {
     await ServiceModel.destroy({ where: { $id$: serviceId } });
     return service;
   }
+
+  async getServices(limit: number, page: number) {
+    let offset = page * limit - limit;
+
+    const services = await ServiceModel.findAndCountAll({
+      include: [{ model: ServicesInfosModel, as: 'infos' }],
+      order: [
+        ['id', 'ASC'],
+        [{ model: ServicesInfosModel, as: 'infos' }, 'id'],
+      ],
+      limit,
+      offset,
+      distinct: true,
+    });
+
+    return services;
+  }
+
+  async getServiceById(serviceId: number) {
+    const service = await ServiceModel.findOne({
+      where: { id: serviceId },
+      include: [{ model: ServicesInfosModel, as: 'infos' }],
+      order: [
+        ['id', 'ASC'],
+        [{ model: ServicesInfosModel, as: 'infos' }, 'id'],
+      ],
+    });
+
+    return service;
+  }
 }
 
 export default new ServiceModelService();

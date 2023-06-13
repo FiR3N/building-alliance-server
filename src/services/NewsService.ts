@@ -5,6 +5,7 @@ import { UploadedFile } from 'express-fileupload';
 import { v4 } from 'uuid';
 import fs from 'fs';
 import { NextFunction } from 'express';
+import { Op } from 'sequelize';
 
 class NewsService {
   async addNews(name: string, description: string, img: UploadedFile, info: string, date: string) {
@@ -132,6 +133,43 @@ class NewsService {
     await NewsInfosModel.destroy({ where: { $newsId$: newsId } });
 
     await NewsModel.destroy({ where: { $id$: newsId } });
+    return news;
+  }
+
+  async getNews(limit: number, page: number, searchName: string) {
+    searchName = searchName?.toLowerCase();
+
+    const whereSeacrhName: any = {};
+    if (searchName) {
+      whereSeacrhName.name = { [Op.iLike]: `%${searchName}%` };
+    }
+    let offset = page * limit - limit;
+
+    const news = await NewsModel.findAndCountAll({
+      where: whereSeacrhName,
+      include: [{ model: NewsInfosModel, as: 'infos' }],
+      order: [
+        ['date', 'DESC'],
+        [{ model: NewsInfosModel, as: 'infos' }, 'id'],
+      ],
+      limit,
+      offset,
+      distinct: true,
+    });
+
+    return news;
+  }
+
+  async getNewsById(newsId: number) {
+    const news = await NewsModel.findOne({
+      where: { id: newsId },
+      include: [{ model: NewsInfosModel, as: 'infos' }],
+      order: [
+        ['date', 'DESC'],
+        [{ model: NewsInfosModel, as: 'infos' }, 'id'],
+      ],
+    });
+
     return news;
   }
 }

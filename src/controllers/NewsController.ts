@@ -12,9 +12,9 @@ class NewsController {
       const { name, description, info, date } = req.body;
       let image = req.files?.image as UploadedFile;
 
-      const employeeWithInfo = await NewsService.addNews(name, description, image, info, date);
+      const newsWithInfo = await NewsService.addNews(name, description, image, info, date);
 
-      return res.status(200).json(employeeWithInfo);
+      return res.status(200).json(newsWithInfo);
     } catch (e: any) {
       console.log(e.message);
       next(e);
@@ -54,25 +54,7 @@ class NewsController {
       let page = Number(req.query.page) || 1;
       let searchName = req.query.name as string;
 
-      searchName = searchName?.toLowerCase();
-
-      const whereSeacrhName: any = {};
-      if (searchName) {
-        whereSeacrhName.name = { [Op.iLike]: `%${searchName}%` };
-      }
-      let offset = page * limit - limit;
-
-      const news = await NewsModel.findAndCountAll({
-        where: whereSeacrhName,
-        include: [{ model: NewsInfosModel, as: 'infos', order: [['id', 'ASC']] }],
-        order: [
-          ['id', 'DESC'],
-          ['date', 'DESC'],
-        ],
-        limit,
-        offset,
-        distinct: true,
-      });
+      const news = await NewsService.getNews(limit, page, searchName);
 
       return res.status(200).json(news);
     } catch (e) {
@@ -84,14 +66,7 @@ class NewsController {
     try {
       let newsId = Number(req.params.newsId);
 
-      const news = await NewsModel.findOne({
-        where: { id: newsId },
-        include: [{ model: NewsInfosModel, as: 'infos', order: [['id', 'ASC']] }],
-        order: [
-          ['id', 'DESC'],
-          ['date', 'DESC'],
-        ],
-      });
+      const news = await NewsService.getNewsById(newsId);
 
       return res.status(200).json(news);
     } catch (e) {

@@ -10,10 +10,7 @@ import vacancyRouter from './vacanciesRouter.js';
 import mixturesRouter from './mixturesRouter.js';
 import mixtureTypesRouter from './mixtureTypesRouter.js';
 import vehicleRouter from './vehicleRouter.js';
-
-// import employeRouter from './employeeRouter.js';
-// import vehicleRouter from './vehicleRouter.js';
-// import constructionWorksRouter from './constructionWorksRouter.js';
+import reviewsRouter from './reviewsRouter.js';
 
 const router = Router();
 
@@ -28,9 +25,6 @@ router.use('/roles', roleRouter);
 router.use('/mixtures', mixturesRouter);
 router.use('/mixture-types', mixtureTypesRouter);
 router.use('/vehicles', vehicleRouter);
-
-// router.use('/employee', employeRouter);
-// router.use('/vehicle', vehicleRouter);
-// router.use('/construction-works', constructionWorksRouter);
+router.use('/reviews', reviewsRouter);
 
 export default router;
