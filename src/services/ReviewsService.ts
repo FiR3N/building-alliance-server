@@ -2,7 +2,7 @@ import { UploadedFile } from 'express-fileupload';
 import ReviewsModel from '../models/ReviewsModel.js';
 import { v4 } from 'uuid';
 import path from 'path';
-import { REVIEWS_PLUG_IMG, WORK_PLUG_IMG, __dirname } from '../utils/conts.js';
+import { REVIEWS_PLUG_IMG, __dirname } from '../utils/conts.js';
 import fs from 'fs';
 import { NextFunction } from 'express';
 
@@ -73,7 +73,7 @@ class ReviewsService {
   async deleteReview(reviewId: number, next: NextFunction) {
     const review = await ReviewsModel.findOne({ where: { $id$: reviewId } });
     if (review)
-      if (review?.image != WORK_PLUG_IMG) {
+      if (review?.image != REVIEWS_PLUG_IMG) {
         fs.unlink(path.resolve(__dirname, 'static', 'reviews', review?.image!), (err: any) => {
           if (err) next(err);
           console.log(`reviews/${review?.image}.jpg was deleted`);
