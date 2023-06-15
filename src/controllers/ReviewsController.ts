@@ -7,10 +7,10 @@ import ReviewsService from '../services/ReviewsService.js';
 class ReviewsController {
   async addReview(req: Request, res: Response, next: NextFunction) {
     try {
-      const { companyName, description, rating } = req.body;
+      const { companyName, description, rating, isPublished } = req.body;
       let image = req.files?.image as UploadedFile;
 
-      const review = await ReviewsService.addReview(companyName, description, rating, image);
+      const review = await ReviewsService.addReview(companyName, description, rating, image, isPublished);
 
       return res.status(200).json(review);
     } catch (e: any) {

@@ -7,7 +7,7 @@ import fs from 'fs';
 import { NextFunction } from 'express';
 
 class ReviewsService {
-  async addReview(companyName: string, description: string, rating: number, image: UploadedFile) {
+  async addReview(companyName: string, description: string, rating: number, image: UploadedFile, isPublished: boolean) {
     let imgPathname: string;
     if (image) {
       imgPathname = v4() + '.jpg';
@@ -20,7 +20,7 @@ class ReviewsService {
       companyName: companyName,
       description: description,
       rating: rating,
-      isPublished: false,
+      isPublished: isPublished ? isPublished : false,
       image: imgPathname,
     });
 
