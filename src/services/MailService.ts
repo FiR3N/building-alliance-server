@@ -28,14 +28,13 @@ class MailService {
       from: email,
       to: process.env.SMPTP_USER,
       subject: `Тема: ${subject}`,
-      text: text,
-      html: `<div style="margin-bottom: 20px; font-weight: bold;">From ${email}</div>
-      <div style="margin-bottom: 10px; font-weight: bold;">UserName: ${name}</div>
-      <div style="margin-bottom: 10px; font-weight: bold;"> UserSurname: ${surname}</div>
-      <div style="margin-bottom: 10px; font-weight: bold;">CompanyName: ${companyName}</div>
-      <div style="margin-bottom: 20px; font-weight: bold;">Telephone: ${telephone}</div>
- 
-      <div>${text}</div>
+      text: '',
+      html: `<div style="margin-bottom: 20px; font-weight: bold;">Почта пользователя: <span style="font-weight: 500">${email}<span/></div>
+      <div style="margin-bottom: 10px; font-weight: bold;">Имя пользователя: <span style="font-weight: 500">${name}<span/></div>
+      <div style="margin-bottom: 10px; font-weight: bold;">Фамилия пользователя: <span style="font-weight: 500">${surname}<span/></div>
+      <div style="margin-bottom: 10px; font-weight: bold;">Организация пользователя: <span style="font-weight: 500">${companyName}<span/></div>
+      <div style="margin-bottom: 20px; font-weight: bold;">Телефон пользователя: <span style="font-weight: 500">${telephone}<span/></div>
+      <div style="margin-bottom: 20px; font-weight: bold;">Сообщение пользователя: <span style="font-weight: 500">${text}<span/></div>
       `,
     });
   }
@@ -53,7 +52,7 @@ class MailService {
       from: process.env.SMPTP_USER,
       to: process.env.SMPTP_USER,
       subject: `Заявка на вакансию: ${vacancyName}`,
-      text: text,
+      text: '',
       html: `<div style="margin-bottom: 10px; font-weight: bold;">Почта пользователя: <span style="font-weight: 500">${email}</span></div>
       <div style="margin-bottom: 10px; font-weight: bold;">ФИО пользователя: <span style="font-weight: 500">${surname} ${name} ${patronymic} </span></div>
       <div style="margin-bottom: 10px; font-weight: bold;">Телефон пользователя: <span style="font-weight: 500">${telephone}</span></div>
@@ -76,7 +75,7 @@ class MailService {
       from: process.env.SMPTP_USER,
       to: process.env.SMPTP_USER,
       subject: `Заказ на смеси и растворы: `,
-      text: text,
+      text: '',
       html: `
       <h1 style="margin-bottom: 20px; font-weight: bold; font-size: 30px">Данные заказа</h1>
       <div style="font-weight: bold;">Предварительный итог: <span style="font-weight: 500">${price} BYN</span></div>
@@ -106,7 +105,7 @@ class MailService {
       from: process.env.SMPTP_USER,
       to: process.env.SMPTP_USER,
       subject: `Заказ на технику: `,
-      text: text,
+      text: '',
       html: `
       <h1 style="margin-bottom: 20px; font-weight: bold; font-size: 30px">Данные заказа</h1>
       <div style="font-weight: bold;">Предварительный итог: <span style="font-weight: 500">${price} BYN</span></div>
