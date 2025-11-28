@@ -10,5 +10,12 @@ export default new Sequelize(
     dialect: 'postgres',
     host: process.env.DB_HOST as string,
     port: Number(process.env.DB_PORT as string),
+    dialectOptions: {
+      ssl: {
+        require: true,
+        rejectUnauthorized: false,
+      },
+    },
+    logging: console.log,
   },
 );
