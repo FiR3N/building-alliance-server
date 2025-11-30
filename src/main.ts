@@ -20,8 +20,8 @@ app.use(cookieParser());
 app.use(
   cors({
     credentials: true,
-    // origin: process.env.CLIENT_URL,
-    origin: true,
+    origin: process.env.CLIENT_URL,
+    //origin: true,
   }),
 );
 app.use('/api/images', express.static(path.resolve(__dirname, 'static')));
